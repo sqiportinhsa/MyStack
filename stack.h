@@ -21,11 +21,15 @@ typedef struct {
 } Stack;
 
 typedef enum {
-    NO_ERROR     = 0,
-    MEMORY_EXC   = 1,
-    EMPTY_STACK  = 2,
-    SIZE_EXC_CAP = 4,
-    SIZE_CRASHED = 8,
+    NO_ERROR         = 0,
+    EMPTY_STACK      = 1,
+    MEMORY_EXCEED    = 2,
+    SIZE_EXCEED_CAP  = 4,
+    INCORRECT_DATA   = 8,
+    DATA_PTR_CRASHED = 16,
+    LOGS_PTR_CRASHED = 32,
+    FILE_INF_CRASHED = 64,
+    FUNC_INF_CRASHED = 128,
 } Error;
 
 #define StackCtr(stk, n_elem)                                                              \

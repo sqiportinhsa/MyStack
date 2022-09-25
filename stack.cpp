@@ -12,7 +12,7 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char *func, co
 
     strcpy(stk->logs->file_of_creation, file);
     strcpy(stk->logs->func_of_creation, func);
-    
+
     stk->logs->line_of_creation = line;
 
     stk->data = (Elem_t*) calloc(n_elem, sizeof(Elem_t));
@@ -20,7 +20,7 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char *func, co
     stk->size     = 0;
 
     if (stk->data == nullptr) {
-        return MEMORY_EXC;
+        return MEMORY_EXCEED;
     }
 
     return PoisonCells(stk, n_elem);
@@ -36,7 +36,7 @@ Error StackDestr(Stack *stk) {
 
 Error PoisonCells(Stack *stk, size_t n_cells) {
     if (stk->size + n_cells > stk->capacity + 1) {
-        return SIZE_EXC_CAP;
+        return SIZE_EXCEED_CAP;
     }
 
     for (size_t i = 0; i < n_cells; ++i) {
@@ -52,7 +52,7 @@ Error StackPush(Stack *stk, Elem_t value) {
     }
 
     if (isnan(stk->data[stk->size - 1]) || !isnan(stk->data[stk->size])) {
-        return SIZE_CRASHED;
+        return INCORRECT_DATA;
     }
     stk->data[stk->size] = value;
     ++(stk->size);
@@ -93,7 +93,7 @@ Error ResizeStack(Stack *stk, size_t capacity) {
     }
 
     if (stk->data == nullptr) {
-        return MEMORY_EXC;
+        return MEMORY_EXCEED;
     }
 
     return NO_ERROR;
