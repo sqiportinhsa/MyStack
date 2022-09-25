@@ -5,7 +5,7 @@
 #define STACK
 
 typedef double Elem_t;
-const Elem_t Poisoned_cell = NAN;
+const Elem_t Poisoned_cell = nan("57");
 
 typedef struct {
     int         line_of_creation;
@@ -42,5 +42,6 @@ Error StackPush(Stack *stk, Elem_t value);
 Error StackPop(Stack *stk);
 Error ResizeStack(Stack *stk, size_t capacity);
 Error PoisonCells(Stack *stk, size_t n_cells);
+int IsPoisoned(double el1);
 
 #endif

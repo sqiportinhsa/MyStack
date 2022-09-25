@@ -51,7 +51,7 @@ Error StackPush(Stack *stk, Elem_t value) {
         ResizeStack(stk, stk->capacity * 2);
     }
 
-    if (isnan(stk->data[stk->size - 1]) || !isnan(stk->data[stk->size])) {
+    if (IsPoisoned(stk->data[stk->size - 1]) || !IsPoisoned(stk->data[stk->size])) {
         return INCORRECT_DATA;
     }
     stk->data[stk->size] = value;
@@ -97,4 +97,11 @@ Error ResizeStack(Stack *stk, size_t capacity) {
     }
 
     return NO_ERROR;
+}
+
+int IsPoisoned(double el1) {
+    if (memcmp(&el1, &Poisoned_cell, sizeof(double)) == 0) {
+        return 1;
+    }
+    return 0;
 }

@@ -82,7 +82,7 @@ int StackVerificator(Stack *stk) {
 
     if (!ErrorIsThere(errors, DATA_PTR_CRASHED) && !ErrorIsThere(errors, SIZE_EXCEED_CAP)) {
         for (size_t i = 0; i < stk->size; ++i) {
-            if (isnan(stk->data[i])) {
+            if (IsPoisoned(stk->data[i])) {
                 errors |= INCORRECT_DATA;
                 break;
             }
@@ -90,7 +90,7 @@ int StackVerificator(Stack *stk) {
 
         if (!ErrorIsThere(errors, INCORRECT_DATA)) {
             for (size_t i = stk->size; i < stk->capacity; ++i) {
-                if (!isnan(stk->data[i])) {
+                if (!IsPoisoned(stk->data[i])) {
                     errors |= INCORRECT_DATA;
                     break;
                 }
