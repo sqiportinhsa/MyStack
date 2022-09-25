@@ -4,13 +4,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-Error StackCtr(Stack *stk, size_t n_elem) {
+Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char *func, const char *file) {
+    stk->logs = (Logs*) calloc(1, sizeof(Logs));
+
+    stk->logs->file_of_creation = (char*) calloc(sizeof(file), sizeof(char));
+    stk->logs->func_of_creation = (char*) calloc(sizeof(func), sizeof(char));
+
+    strcpy(stk->logs->file_of_creation, file);
+    strcpy(stk->logs->func_of_creation, func);
+    
+    stk->logs->line_of_creation = line;
+
     stk->data = (Elem_t*) calloc(n_elem, sizeof(Elem_t));
+    stk->capacity = n_elem;
+    stk->size     = 0;
+
     if (stk->data == nullptr) {
         return MEMORY_EXC;
     }
-    stk->capacity = n_elem;
-    stk->size     = 0;
+
     return PoisonCells(stk, n_elem);
 }
 
