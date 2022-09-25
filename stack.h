@@ -8,9 +8,9 @@ typedef double Elem_t;
 const Elem_t Poisoned_cell = NAN;
 
 typedef struct {
-    int   line_of_creation;
-    char* file_of_creation;
-    char* func_of_creation;
+    int         line_of_creation;
+    const char* file_of_creation;
+    const char* func_of_creation;
 } Logs;
 
 typedef struct {
@@ -30,12 +30,13 @@ typedef enum {
     LOGS_PTR_CRASHED = 32,
     FILE_INF_CRASHED = 64,
     FUNC_INF_CRASHED = 128,
+    OPEN_LOGFILE_ERR = 256,
 } Error;
 
-#define StackCtr(stk, n_elem)                                                              \
+#define StackCtr(stk, n_elem)                                                 \
         StackCtrWithLogs(stk, n_elem, __LINE__, __PRETTY_FUNCTION__, __FILE__);
 
-Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char *func, const char *file);
+Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file);
 Error StackDestr(Stack *stk);
 Error StackPush(Stack *stk, Elem_t value);
 Error StackPop(Stack *stk);

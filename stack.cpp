@@ -4,15 +4,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char *func, const char *file) {
+Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file) {
     stk->logs = (Logs*) calloc(1, sizeof(Logs));
 
-    stk->logs->file_of_creation = (char*) calloc(sizeof(file), sizeof(char));
-    stk->logs->func_of_creation = (char*) calloc(sizeof(func), sizeof(char));
+    if (stk->logs == nullptr) {
+        return OPEN_LOGFILE_ERR;
+    }
 
-    strcpy(stk->logs->file_of_creation, file);
-    strcpy(stk->logs->func_of_creation, func);
-
+    stk->logs->file_of_creation = file;
+    stk->logs->func_of_creation = func;
     stk->logs->line_of_creation = line;
 
     stk->data = (Elem_t*) calloc(n_elem, sizeof(Elem_t));
