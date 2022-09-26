@@ -33,3 +33,5 @@ You can use both of this defines at same time, only one or none of them.
 
 I made some tests of StackPush and StackPop in "main.cpp". It is also an example of working with MyStack. You can download and edit it to run your own tests and learn
 how to use functions. Use makefile to compile all files from repository together to play with them.
+
+[Useful link](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
