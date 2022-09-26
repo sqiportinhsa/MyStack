@@ -71,12 +71,30 @@ void DumpLogs(Stack *stk, const char *file, const char *func, int line, int erro
         Print(logs, "DATA_PTR_CRASHED: cannot print data, information was lost\n");
     } else {
         Print(logs, "\t {\n");
+
+        #ifdef CANARY_VERIFICATION
+        if (ErrorIsThere(errors, L_BORDER_CHANGED)) {
+            Print(logs, "\t \t Left  Border = %lld (expected %lld)\n", stk->left_border, Border);
+        } else {
+            Print(logs, "\t \t Left  Border = %lld (OK)\n", stk->left_border);
+        }
+        #endif
+
         for (size_t i = 0;         i < stk->size;     ++i) {
             Print(logs, "\t \t [%lld] = %f (busy)\n",   i, stk->data[i]);
         }
         for (size_t i = stk->size; i < stk->capacity; ++i) {
             Print(logs, "\t \t [%lld] = %f (poison)\n", i, stk->data[i]);
         }
+
+        #ifdef CANARY_VERIFICATION
+        if (ErrorIsThere(errors, R_BORDER_CHANGED)) {
+            Print(logs, "\t \t Right Border = %lld (expected %lld)\n", stk->right_border, Border);
+        } else {
+            Print(logs, "\t \t Right Border = %lld (OK)\n", stk->right_border);
+        }
+        #endif
+
         Print(logs, "\t }\n");
     }
 
@@ -85,55 +103,6 @@ void DumpLogs(Stack *stk, const char *file, const char *func, int line, int erro
     #ifdef LOGS_TO_FILE
     fclose(logs);
     #endif
-}
-
-int StackVerificator(Stack *stk) {
-    int errors = NO_ERROR;
-
-    if (stk->capacity < stk->size) {
-        errors |= SIZE_EXCEED_CAP;
-    }
-
-    if (stk->data == nullptr) {
-        errors |= DATA_PTR_CRASHED;
-    }
-
-    if (stk->logs == nullptr) {
-        errors |= LOGS_PTR_CRASHED;
-    }
-
-    if (!ErrorIsThere(errors, DATA_PTR_CRASHED) && !ErrorIsThere(errors, SIZE_EXCEED_CAP)) {
-        for (size_t i = 0; i < stk->size; ++i) {
-            if (IsPoisoned(stk->data[i])) {
-                errors |= INCORRECT_DATA;
-                break;
-            }
-        }
-
-        if (!ErrorIsThere(errors, INCORRECT_DATA)) {
-            for (size_t i = stk->size; i < stk->capacity; ++i) {
-                if (!IsPoisoned(stk->data[i])) {
-                    errors |= INCORRECT_DATA;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (!ErrorIsThere(errors, LOGS_PTR_CRASHED)) {
-        if (stk->logs->file_of_creation == nullptr) {
-            errors |= FILE_INF_CRASHED;
-        }
-        if (stk->logs->func_of_creation == nullptr) {
-            errors |= FUNC_INF_CRASHED;
-        }
-    }
-
-    return errors;
-}
-
-int ErrorIsThere(int errors, Error error) {
-    return (errors & error);
 }
 
 void Print(FILE *output, const char *format, ...) {

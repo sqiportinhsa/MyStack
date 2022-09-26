@@ -4,8 +4,8 @@ CPPFLAGS = -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-e
 .PHONY: all
 all: $(TARGET)
 
-$(TARGET): bin\main.o bin\stack.o bin\stack_logs.o
-	g++ bin\main.o bin\stack.o bin\stack_logs.o  -o $(TARGET) $(CPPFLAGS)
+$(TARGET): bin\main.o bin\stack.o bin\stack_logs.o bin\verification.o
+	g++ bin\main.o bin\stack.o bin\stack_logs.o bin\verification.o  -o $(TARGET) $(CPPFLAGS)
 
 bin\main.o: main.cpp stack.h
 	g++ -c main.cpp -o bin\main.o $(CPPFLAGS)
@@ -13,5 +13,8 @@ bin\main.o: main.cpp stack.h
 bin\stack.o: stack.cpp stack.h
 	g++ -c stack.cpp -o bin\stack.o $(CPPFLAGS)
 
-bin\stack_logs.o: stack_logs.cpp stack.h
+bin\stack_logs.o: stack_logs.cpp stack_logs.h stack.h
 	g++ -c stack_logs.cpp -o bin\stack_logs.o $(CPPFLAGS)
+
+bin\verification.o: verification.cpp verification.h stack.h
+	g++ -c verification.cpp -o bin\verification.o $(CPPFLAGS)

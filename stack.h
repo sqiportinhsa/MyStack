@@ -1,23 +1,30 @@
-#include <stdio.h>
-#include <math.h>
-
 #ifndef STACK
 #define STACK
+
+#include <stdio.h>
+#include <math.h>
 
 typedef double Elem_t;
 const Elem_t Poisoned_cell = nan("57");
 
+typedef unsigned long long Canary_t;
+const Canary_t Border = 0XBAAD7004;
+
 typedef struct {
+    Canary_t     left_border;
     int         line_of_creation;
     const char* file_of_creation;
     const char* func_of_creation;
+    Canary_t     right_border;
 } Logs;
 
 typedef struct {
+    Canary_t  left_border;
     Elem_t*  data;
     size_t   size;
     size_t   capacity;
     Logs*    logs;
+    Canary_t  right_border;
 } Stack;
 
 typedef enum {
@@ -30,7 +37,9 @@ typedef enum {
     LOGS_PTR_CRASHED = 32,
     FILE_INF_CRASHED = 64,
     FUNC_INF_CRASHED = 128,
-    OPEN_LOGFILE_ERR = 256,
+    R_BORDER_CHANGED = 256,
+    L_BORDER_CHANGED = 512,
+    OPEN_LOGFILE_ERR = 1024,
 } Error;
 
 #define StackCtr(stk, n_elem)                                                 \

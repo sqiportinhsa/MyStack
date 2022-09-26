@@ -15,13 +15,22 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
     stk->logs->func_of_creation = func;
     stk->logs->line_of_creation = line;
 
-    stk->data = (Elem_t*) calloc(n_elem, sizeof(Elem_t));
-    stk->capacity = n_elem;
-    stk->size     = 0;
+    stk->logs->left_border  = Border;
+    stk->logs->right_border = Border;
+
+    stk->data = (Elem_t*) calloc(n_elem * sizeof(Elem_t) + 2 * sizeof(Canary_t), sizeof(char));
 
     if (stk->data == nullptr) {
         return MEMORY_EXCEED;
     }
+
+    stk->data = (Elem_t*) ((char*) stk->data + sizeof(Canary_t));
+
+    stk->capacity = n_elem;
+    stk->size     = 0;
+
+    stk->left_border  = Border;
+    stk->right_border = Border;
 
     return PoisonCells(stk, n_elem);
 }
@@ -76,31 +85,50 @@ Error StackPop(Stack *stk) {
 }
 
 Error ResizeStack(Stack *stk, size_t capacity) {
+    Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t*));
+
     if (stk->capacity < capacity) {
-        stk->data = (Elem_t*) realloc(stk->data, capacity * sizeof(Elem_t));
+        stk->data = (Elem_t*) realloc(l_border_ptr, capacity * sizeof(Elem_t) 
+                                                         + 2 * sizeof(Canary_t));
+        if (stk->data == nullptr) {
+            return MEMORY_EXCEED;
+        }
+
+        stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
         stk->capacity = capacity;
+
         PoisonCells(stk, stk->capacity / 2);
     }
 
     if (stk->size < capacity / 2) {
-        stk->data = (Elem_t*) realloc(stk->data, capacity * sizeof(Elem_t) / 2);
+        stk->data = (Elem_t*) realloc(l_border_ptr, capacity * sizeof(Elem_t) / 2 
+                                                         + 2 * sizeof(Canary_t));
+        if (stk->data == nullptr) {
+            return MEMORY_EXCEED;
+        }
+
+        stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
         stk->capacity = capacity / 2;
     }
 
     if (capacity == 0) {
-        stk->data = (Elem_t*) realloc(stk->data, 0);
+        stk->data = (Elem_t*) realloc(l_border_ptr, 2 * sizeof(Canary_t));
+
+        if (stk->data == nullptr) {
+            return MEMORY_EXCEED;
+        }
+
         stk->capacity = 0;
     }
 
-    if (stk->data == nullptr) {
-        return MEMORY_EXCEED;
-    }
+    Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
+    *r_border_ptr = Border;
 
     return NO_ERROR;
 }
 
 int IsPoisoned(double el1) {
-    if (memcmp(&el1, &Poisoned_cell, sizeof(double)) == 0) {
+    if (memcmp(&el1, &Poisoned_cell, sizeof(Elem_t)) == 0) {
         return 1;
     }
     return 0;
