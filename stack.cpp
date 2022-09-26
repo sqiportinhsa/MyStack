@@ -8,7 +8,7 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
     stk->logs = (Logs*) calloc(1, sizeof(Logs));
 
     if (stk->logs == nullptr) {
-        return OPEN_LOGFILE_ERR;
+        return MEMORY_EXCEED;
     }
 
     stk->logs->file_of_creation = file;

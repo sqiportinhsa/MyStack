@@ -6,6 +6,10 @@
 void MakeLogs(Stack *stk, const char *file, const char *func, int line, int errors) {
     FILE *logs = fopen("logs.txt", "a");
 
+    if (logs == nullptr) {
+        return;
+    }
+
     fprintf(logs, "Logs called in %s at %s(%d):\n", func, file, line);
 
     if (ErrorIsThere(errors, LOGS_PTR_CRASHED)) {
