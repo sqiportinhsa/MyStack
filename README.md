@@ -15,13 +15,19 @@ If you need some information about stack to debug your code, the "stack_logs" is
 * Include "stack_logs.h" everywhere you need.
 * Compile "stack_logs.cpp" to the object file and add to all your object files at the moment of compilation.
 
-Use DumpLogs to dump logs to logfile or to your console. 
-If you want to dump logs to file define "LOGS_TO_FILE" in "stack_logs" (was defined by default). 
-It creates or opens an existing "logs.txt" file for adding information and dump logs there.
+Use DumpLogs to dump logs to logfile or to your console. If you want to dump logs to file print
+```c++
+#define LOGS_TO_FILE
+```
+in "stack_logs.h" (was defined by default). It creates or opens an existing "logs.txt" file for adding information and dump logs there.
 
-If you want to dump logs to console use "#define LOGS_TO_CONSOLE".
+If you want to dump logs to console print
+```c++
+#define LOGS_TO_CONSOLE
+```
+in "stack_logs.h".
 
-You can use both of this defines at same time or only one of them
+You can use both of this defines at same time, only one or none of them.
 
 ## Testing and examples of using
 
