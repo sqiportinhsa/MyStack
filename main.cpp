@@ -9,14 +9,14 @@ int main() {
 
     err |= StackCtr(&stk, 3);
 
-    for (size_t i = 0; i < 100; ++i) {
+    for (size_t i = 0; i < 10; ++i) {
         err |= StackPush(&stk, (double) i);
-        MakeLogs(&stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, StackVerificator(&stk));
+        DumpLogs(&stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, StackVerificator(&stk));
     }
 
-    for (size_t i = 0; i < 100; ++i) {
+    for (size_t i = 0; i < 10; ++i) {
         err |= StackPop(&stk);
-        MakeLogs(&stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, StackVerificator(&stk));
+        DumpLogs(&stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, StackVerificator(&stk));
     }
 
     if (err == 0) {
