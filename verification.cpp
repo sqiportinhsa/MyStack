@@ -1,7 +1,7 @@
 #include "verification.h"
 
 
-int StackVerificator(Stack *stk) {
+int SafeStackVerificator(Stack *stk, const char *func, int line) {
     int errors = NO_ERROR;
 
     if (stk->capacity < stk->size) {
@@ -90,6 +90,14 @@ int StackVerificator(Stack *stk) {
             errors |= FUNC_INF_CRASHED;
         }
     }
+
+    #ifdef SAFEMODE
+
+    if (errors != 0) {
+        DumpLogs(stk, "logs.txt", func, line, errors);
+    }
+
+    #endif
 
     return errors;
 }

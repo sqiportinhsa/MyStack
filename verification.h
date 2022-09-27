@@ -4,10 +4,17 @@
 #include "stack.h"
 
 #define DEEP_VERIFICATION
-//#define CANARY_VERIFICATION
-//#define HASH_VERIFICATION
+#define CANARY_VERIFICATION
+#define HASH_VERIFICATION
+#define SAFEMODE
 
-int StackVerificator(Stack *stk);
+#ifdef SAFEMODE
+#include "stack_logs.h"
+#endif
+
+#define StackVerificator(stk) SafeStackVerificator(stk, __PRETTY_FUNCTION__, __LINE__);
+
+int SafeStackVerificator(Stack *stk, const char *func, int line);
 int ErrorIsThere(int errors, Error error);
 size_t StackHash(Stack *stk);
 
