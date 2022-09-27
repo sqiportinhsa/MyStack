@@ -24,10 +24,16 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
         return MEMORY_EXCEED;
     }
 
-    stk->data = (Elem_t*) ((char*) stk->data + sizeof(Canary_t));
+    stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
 
     stk->capacity = n_elem;
     stk->size     = 0;
+
+    Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t*));
+    Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
+
+    *l_border_ptr = Border;
+    *r_border_ptr = Border;
 
     stk->left_border  = Border;
     stk->right_border = Border;

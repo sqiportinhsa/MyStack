@@ -49,6 +49,7 @@ int StackVerificator(Stack *stk) {
         }
 
         if (*r_border_ptr != Border) {
+            printf("%lln %lld\n", r_border_ptr, Border);
             errors |= R_BORDER_CHANGED;
         }
     }
