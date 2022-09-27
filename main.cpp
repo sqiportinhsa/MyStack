@@ -16,11 +16,15 @@ int main() {
         DumpLogs(&stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, err);
     }
 
-    for (size_t i = 0; i < 10; ++i) {
+    for (size_t i = 0; i < 5; ++i) {
         err |= StackPop(&stk);
         err |= StackVerificator(&stk);
         DumpLogs(&stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, err);
     }
+
+    stk.data[stk.size] = 14;
+    err |= StackVerificator(&stk);
+    DumpLogs(&stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, err);
 
     if (err == 0) {
         printf("There is no errors\n");

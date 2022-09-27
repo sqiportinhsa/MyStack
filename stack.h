@@ -10,36 +10,45 @@ const Elem_t Poisoned_cell = nan("57");
 typedef unsigned long long Canary_t;
 const Canary_t Border = 0XBAAD7004;
 
+const size_t Hash_base_const = 5381;
+const size_t Hash_mult_const = 33;
+
 typedef struct {
     Canary_t     left_border;
-    int         line_of_creation;
-    const char* file_of_creation;
-    const char* func_of_creation;
+    int          line_of_creation;
+    const char*  file_of_creation;
+    const char*  func_of_creation;
     Canary_t     right_border;
 } Logs;
 
 typedef struct {
     Canary_t  left_border;
-    Elem_t*  data;
-    size_t   size;
-    size_t   capacity;
-    Logs*    logs;
+    Elem_t*   data;
+    size_t    size;
+    size_t    capacity;
+    size_t    hash;
+    Logs*     logs;
     Canary_t  right_border;
 } Stack;
 
 typedef enum {
     NO_ERROR         = 0,
-    EMPTY_STACK      = 1,
-    MEMORY_EXCEED    = 2,
-    SIZE_EXCEED_CAP  = 4,
-    INCORRECT_DATA   = 8,
-    DATA_PTR_CRASHED = 16,
-    LOGS_PTR_CRASHED = 32,
-    FILE_INF_CRASHED = 64,
-    FUNC_INF_CRASHED = 128,
-    R_BORDER_CHANGED = 256,
-    L_BORDER_CHANGED = 512,
-    OPEN_LOGFILE_ERR = 1024,
+    HASH_CALC_ERR    = 1,
+    HASH_DISMATCH    = 2,
+    EMPTY_STACK      = 4,
+    MEMORY_EXCEED    = 8,
+    UNEXPECTED_PSN   = 16,
+    UNEXPECTED_ELM   = 32,
+    SIZE_EXCEED_CAP  = 64,
+    DATA_PTR_CRASHED = 128,
+    LOGS_PTR_CRASHED = 256,
+    FILE_INF_CRASHED = 512,
+    FUNC_INF_CRASHED = 1024,
+    R_BORDER_CHANGED = 2048,
+    L_BORDER_CHANGED = 4096,
+    OPEN_LOGFILE_ERR = 8192,
+    STK_BRDR_CHANGED = 16384,
+    LGS_BRDR_CHANGED = 32768,
 } Error;
 
 #define StackCtr(stk, n_elem)                                                 \

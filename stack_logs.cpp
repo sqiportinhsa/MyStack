@@ -60,12 +60,25 @@ void DumpLogs(Stack *stk, const char *file, const char *func, int line, int erro
         Print(logs, "Error: size exceed capacity\n");
     }
 
+    #ifdef HASH_VERIFICATION
+    if (ErrorIsThere(errors, HASH_DISMATCH)) {
+        Print(logs, "Error: Hash dismatch. Data may be lost.");
+    }
+    #endif
+
     Print(logs, "Stack info:\n");
 
     Print(logs, "{\n");
     Print(logs, "\t capacity = %lld\n", stk->capacity);
     Print(logs, "\t size     = %lld\n", stk->size);
     Print(logs, "\t data [%p]\n",       stk->data);
+
+    if (ErrorIsThere(errors, UNEXPECTED_PSN)) {
+        Print(logs, "\t Data error: unexpected poison in element's cell\n");
+    }
+    if (ErrorIsThere(errors, UNEXPECTED_ELM)) {
+        Print(logs, "\t Data error: element in poisoned cell\n");
+    }
 
     if (ErrorIsThere(errors, DATA_PTR_CRASHED)) {
         Print(logs, "DATA_PTR_CRASHED: cannot print data, information was lost\n");

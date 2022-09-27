@@ -28,6 +28,7 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
 
     stk->capacity = n_elem;
     stk->size     = 0;
+    stk->hash     = Hash_base_const;
 
     Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t*));
     Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
@@ -67,10 +68,12 @@ Error StackPush(Stack *stk, Elem_t value) {
     }
 
     if (IsPoisoned(stk->data[stk->size - 1]) || !IsPoisoned(stk->data[stk->size])) {
-        return INCORRECT_DATA;
+        return UNEXPECTED_PSN;
     }
     stk->data[stk->size] = value;
     ++(stk->size);
+
+    stk->hash = stk->hash*33 + (size_t) value;
     
     return NO_ERROR;
 }
@@ -83,6 +86,9 @@ Error StackPop(Stack *stk) {
     Error err = NO_ERROR;
 
     --(stk->size);
+
+    
+    stk->hash = (stk->hash - (size_t) stk->data[stk->size]) / Hash_mult_const;
     
     err = PoisonCells(stk, 1);
     err = ResizeStack(stk, stk->capacity);

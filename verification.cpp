@@ -21,15 +21,15 @@ int StackVerificator(Stack *stk) {
     if (!ErrorIsThere(errors, DATA_PTR_CRASHED) && !ErrorIsThere(errors, SIZE_EXCEED_CAP)) {
         for (size_t i = 0; i < stk->size; ++i) {
             if (IsPoisoned(stk->data[i])) {
-                errors |= INCORRECT_DATA;
+                errors |= UNEXPECTED_PSN;
                 break;
             }
         }
 
-        if (!ErrorIsThere(errors, INCORRECT_DATA)) {
+        if (!ErrorIsThere(errors, UNEXPECTED_PSN)) {
             for (size_t i = stk->size; i < stk->capacity; ++i) {
                 if (!IsPoisoned(stk->data[i])) {
-                    errors |= INCORRECT_DATA;
+                    errors |= UNEXPECTED_ELM;
                     break;
                 }
             }
@@ -53,7 +53,33 @@ int StackVerificator(Stack *stk) {
             errors |= R_BORDER_CHANGED;
         }
     }
+
+    if (!ErrorIsThere(errors, LOGS_PTR_CRASHED)) {
+        if (stk->logs->left_border != Border || stk->logs->right_border != Border) {
+            errors |= LGS_BRDR_CHANGED;
+        }
+    }
+
+    if (stk->left_border != Border || stk->right_border != Border) {
+        errors |= STK_BRDR_CHANGED;
+    }
     
+    #endif
+
+    #ifdef HASH_VERIFICATION
+
+    if (!ErrorIsThere(errors, DATA_PTR_CRASHED) && !ErrorIsThere(errors, SIZE_EXCEED_CAP)) {
+        size_t hash = StackHash(stk);
+
+        if (hash == HASH_CALC_ERR) {
+            errors |= HASH_CALC_ERR;
+        }
+
+        if (hash != stk->hash) {
+            errors |= HASH_DISMATCH;
+        }
+    }
+
     #endif
 
     if (!ErrorIsThere(errors, LOGS_PTR_CRASHED)) {
@@ -70,4 +96,16 @@ int StackVerificator(Stack *stk) {
 
 int ErrorIsThere(int errors, Error error) {
     return (errors & error);
+}
+
+size_t StackHash(Stack *stk) {
+    if (stk->data == nullptr || stk->size > stk->capacity) {
+        return (size_t) HASH_CALC_ERR;
+    }
+
+    size_t hash = Hash_base_const;
+    for (size_t i = 0; i < stk->size; ++i) {
+        hash = hash*Hash_mult_const + (size_t) stk->data[i];
+    }
+    return hash;
 }
