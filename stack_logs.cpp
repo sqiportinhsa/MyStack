@@ -98,10 +98,28 @@ void DumpLogs(Stack *stk, const char *file, const char *func, int line, int erro
         #endif
 
         for (size_t i = 0;         i < stk->size;     ++i) {
-            Print(logs, "\t \t [%lld] = %f (busy)\n",   i, stk->data[i]);
+            Print(logs, "\t \t*[%lld] = %-10f",   i, stk->data[i]);
+            #ifdef DEEP_VERIFICATION
+            if (IsPoisoned(stk->data[i])) {
+                Print(logs, " (poisoned)");
+            } else {
+                Print(logs, " (busy)");
+            }
+            #endif
+            Print(logs, "\n");
         }
+
+
         for (size_t i = stk->size; i < stk->capacity; ++i) {
-            Print(logs, "\t \t [%lld] = %f (poison)\n", i, stk->data[i]);
+            Print(logs, "\t \t [%lld] = %-10f", i, stk->data[i]);
+            #ifdef DEEP_VERIFICATION
+            if (IsPoisoned(stk->data[i])) {
+                Print(logs, " (poisoned)");
+            } else {
+                Print(logs, " (busy)");
+            }
+            #endif
+            Print(logs, "\n");
         }
 
         #ifdef CANARY_VERIFICATION
