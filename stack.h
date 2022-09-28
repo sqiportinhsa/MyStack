@@ -55,9 +55,9 @@ typedef enum {
         StackCtrWithLogs(stk, n_elem, __LINE__, __PRETTY_FUNCTION__, __FILE__);
 
 Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file);
-Error StackDestr(Stack *stk);
-Error StackPush(Stack *stk, Elem_t value);
-Error StackPop(Stack *stk);
+int StackDestr(Stack *stk);
+int StackPush(Stack *stk, Elem_t value);
+int StackPop(Stack *stk);
 Error ResizeStack(Stack *stk, size_t capacity);
 Error PoisonCells(Stack *stk, size_t n_cells);
 int IsPoisoned(double el1);

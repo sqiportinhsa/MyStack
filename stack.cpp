@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "verification.h"
 
 Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file) {
     stk->logs = (Logs*) calloc(1, sizeof(Logs));
@@ -42,12 +43,13 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
     return PoisonCells(stk, n_elem);
 }
 
-Error StackDestr(Stack *stk) {
+int StackDestr(Stack *stk) {
+    int errors = NO_ERROR;
     stk->size = 0;
-    PoisonCells(stk, stk->capacity);
-    ResizeStack(stk, 0);
+    errors |= PoisonCells(stk, stk->capacity);
+    errors |= ResizeStack(stk, 0);
     stk->data = nullptr;
-    return NO_ERROR;
+    return errors;
 }
 
 Error PoisonCells(Stack *stk, size_t n_cells) {
@@ -62,36 +64,46 @@ Error PoisonCells(Stack *stk, size_t n_cells) {
     return NO_ERROR;
 }
 
-Error StackPush(Stack *stk, Elem_t value) {
+int StackPush(Stack *stk, Elem_t value) {
+    int errors = NO_ERROR;
+
+    #ifdef SAFEMODE
+    errors |= StackVerificator(stk);
+    #endif
+
     if (stk->size >= stk->capacity) {
-        ResizeStack(stk, stk->capacity * 2);
+        errors |= ResizeStack(stk, stk->capacity * 2);
     }
 
     if (IsPoisoned(stk->data[stk->size - 1]) || !IsPoisoned(stk->data[stk->size])) {
-        return UNEXPECTED_PSN;
+        errors |= UNEXPECTED_PSN;
     }
     stk->data[stk->size] = value;
     ++(stk->size);
 
     stk->hash = stk->hash*33 + (size_t) value;
+
+    #ifdef SAFEMODE
+    StackVerificator(stk);
+    #endif
     
-    return NO_ERROR;
+    return errors;
 }
 
-Error StackPop(Stack *stk) {
+int StackPop(Stack *stk) {
     if (stk->size == 0) {
         return EMPTY_STACK;
     }
 
-    Error err = NO_ERROR;
+    int err = NO_ERROR;
 
     --(stk->size);
 
     
     stk->hash = (stk->hash - (size_t) stk->data[stk->size]) / Hash_mult_const;
     
-    err = PoisonCells(stk, 1);
-    err = ResizeStack(stk, stk->capacity);
+    err |= PoisonCells(stk, 1);
+    err |= ResizeStack(stk, stk->capacity);
 
     return err;
 }
