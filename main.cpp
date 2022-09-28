@@ -27,6 +27,8 @@ int main() {
         err |= StackVerificator(&stk);
     }
 
+    DumpLogs(nullptr, 0);
+
     /*stk.data[stk.size] = 14;
     err |= StackVerificator(&stk);*/
 
