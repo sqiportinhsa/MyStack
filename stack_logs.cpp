@@ -25,6 +25,11 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
     #endif
     #endif
 
+    if (stk == nullptr) {
+        Print(logs, "Can't print logs: pointer to stack is crushed");
+        return;
+    }
+
     Print(logs, "Logs called in %s at %s(%d):\n", func, file, line);
 
     if (ErrorIsThere(errors, LOGS_PTR_CRASHED)) {

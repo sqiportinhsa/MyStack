@@ -4,6 +4,20 @@
 int SafeStackVerificator(Stack *stk, const char *file, const char *func, int line) {
     int errors = NO_ERROR;
 
+    if (stk == nullptr) {
+        errors |= STCK_PTR_CRASHED;
+        
+        #ifdef SAFEMODE
+
+        if (errors != 0) {
+            RealDumpLogs(stk,file, func, line, errors);
+        }
+
+        #endif
+
+        return errors;
+    }
+
     if (stk->capacity < stk->size) {
         errors |= SIZE_EXCEED_CAP;
     }
