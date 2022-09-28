@@ -1,7 +1,7 @@
 #include "verification.h"
 #include "stack_logs.h"
 
-int SafeStackVerificator(Stack *stk, const char *func, int line) {
+int SafeStackVerificator(Stack *stk, const char *file, const char *func, int line) {
     int errors = NO_ERROR;
 
     if (stk->capacity < stk->size) {
@@ -41,7 +41,7 @@ int SafeStackVerificator(Stack *stk, const char *func, int line) {
     #ifdef CANARY_VERIFICATION
     
     if (!ErrorIsThere(errors, DATA_PTR_CRASHED)) {
-        Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t*));
+        Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t));
         Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
 
         if (*l_border_ptr != Border) {
@@ -94,7 +94,7 @@ int SafeStackVerificator(Stack *stk, const char *func, int line) {
     #ifdef SAFEMODE
 
     if (errors != 0) {
-        DumpLogs(stk, "logs.txt", func, line, errors);
+        RealDumpLogs(stk,file, func, line, errors);
     }
 
     #endif

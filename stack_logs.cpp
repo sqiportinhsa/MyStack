@@ -6,7 +6,7 @@
 
 #include "verification.h"
 
-void DumpLogs(Stack *stk, const char *file, const char *func, int line, int errors) {
+void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int errors) {
     FILE *logs = nullptr;
 
     #ifdef LOGS_TO_FILE

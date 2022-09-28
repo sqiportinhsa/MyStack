@@ -6,7 +6,9 @@
 
 #include "stack.h"
 
-void DumpLogs(Stack *stk, const char *file, const char *func, int line, int errors);
+#define DumpLogs(stk, errors) RealDumpLogs(stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, errors);
+
+void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int errors);
 void Print(FILE *logs, const char *format, ...);
 
 #endif
