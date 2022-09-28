@@ -13,7 +13,7 @@ bin\main.o: main.cpp stack.h
 bin\stack.o: stack.cpp stack.h
 	g++ -c stack.cpp -o bin\stack.o $(CPPFLAGS)
 
-bin\stack_logs.o: stack_logs.cpp stack_logs.h stack.h
+bin\stack_logs.o: stack_logs.cpp stack_logs.h stack.h verification.h
 	g++ -c stack_logs.cpp -o bin\stack_logs.o $(CPPFLAGS)
 
 bin\verification.o: verification.cpp verification.h stack.h
