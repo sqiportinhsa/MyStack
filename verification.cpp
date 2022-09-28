@@ -1,5 +1,5 @@
 #include "verification.h"
-
+#include "stack_logs.h"
 
 int SafeStackVerificator(Stack *stk, const char *func, int line) {
     int errors = NO_ERROR;

@@ -4,8 +4,7 @@
 #include <math.h>
 #include <stdarg.h>
 
-#define LOGS_TO_FILE
-//#define LOGS_TO_CONSOLE
+#include "verification.h"
 
 void DumpLogs(Stack *stk, const char *file, const char *func, int line, int errors) {
     FILE *logs = nullptr;

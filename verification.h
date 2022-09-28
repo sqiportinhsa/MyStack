@@ -8,10 +8,6 @@
 #define HASH_VERIFICATION
 #define SAFEMODE
 
-#ifdef SAFEMODE
-#include "stack_logs.h"
-#endif
-
 #define StackVerificator(stk) SafeStackVerificator(stk, __PRETTY_FUNCTION__, __LINE__);
 
 int SafeStackVerificator(Stack *stk, const char *func, int line);
