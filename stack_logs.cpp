@@ -90,14 +90,14 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
         Print(logs, "\t {\n");
 
         #ifdef CANARY_VERIFICATION
-        Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t*));
+        Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t));
         Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
 
         if (ErrorIsThere(errors, L_BORDER_CHANGED)) {
-            Print(logs, "\t \t Left  Border = %lld (expected %lld)\n", *l_border_ptr, Border);
+            Print(logs, "\t \t Left  Border = %llu (expected %llu)\n", *l_border_ptr, Border);
             Print(logs, "errors: %d\n", errors);
         } else {
-            Print(logs, "\t \t Left  Border = %lld (OK)\n", *l_border_ptr);
+            Print(logs, "\t \t Left  Border = %llu (OK)\n", *l_border_ptr);
         }
         #endif
 
@@ -128,9 +128,9 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
 
         #ifdef CANARY_VERIFICATION
         if (ErrorIsThere(errors, R_BORDER_CHANGED)) {
-            Print(logs, "\t \t Right Border = %lld (expected %lld)\n", *r_border_ptr, Border);
+            Print(logs, "\t \t Right Border = %llu (expected %llu)\n", *r_border_ptr, Border);
         } else {
-            Print(logs, "\t \t Right Border = %lld (OK)\n", *r_border_ptr);
+            Print(logs, "\t \t Right Border = %llu (OK)\n", *r_border_ptr);
         }
         #endif
 

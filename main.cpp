@@ -24,6 +24,7 @@ int main() {
             printf("popped %d, expected %d\n", c, 10 - (int) i);
             DumpLogs(&stk, err);
         }
+        DumpLogs(&stk, err);
         err |= StackVerificator(&stk);
     }
 

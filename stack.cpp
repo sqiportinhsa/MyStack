@@ -31,7 +31,7 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
     stk->size     = 0;
     stk->hash     = Hash_base_const;
 
-    Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t*));
+    Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t));
     Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
 
     *l_border_ptr = Border;
@@ -113,7 +113,7 @@ Elem_t StackPop(Stack *stk, int *err) {
 }
 
 Error ResizeStack(Stack *stk, size_t capacity) {
-    Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t*));
+    Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t));
 
     if (stk->capacity < capacity) {
         stk->data = (Elem_t*) realloc(l_border_ptr, capacity * sizeof(Elem_t) 
