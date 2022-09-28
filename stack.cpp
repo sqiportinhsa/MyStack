@@ -45,6 +45,11 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
 
 int StackDestr(Stack *stk) {
     int errors = NO_ERROR;
+
+    #ifdef SAFEMODE
+    errors |= StackVerificator(stk);
+    #endif
+    
     stk->size = 0;
     errors |= PoisonCells(stk, stk->capacity);
     errors |= ResizeStack(stk, 0);
