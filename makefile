@@ -7,10 +7,10 @@ all: $(TARGET)
 $(TARGET): bin\main.o bin\stack.o bin\stack_logs.o bin\verification.o
 	g++ bin\main.o bin\stack.o bin\stack_logs.o bin\verification.o  -o $(TARGET) $(CPPFLAGS)
 
-bin\main.o: main.cpp stack.h
+bin\main.o: main.cpp stack.h verification.h stack_logs.h
 	g++ -c main.cpp -o bin\main.o $(CPPFLAGS)
 
-bin\stack.o: stack.cpp stack.h
+bin\stack.o: stack.cpp stack.h verification.h stack_logs.h
 	g++ -c stack.cpp -o bin\stack.o $(CPPFLAGS)
 
 bin\stack_logs.o: stack_logs.cpp stack_logs.h stack.h verification.h
