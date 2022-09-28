@@ -15,6 +15,9 @@ int main() {
         err |= StackVerificator(&stk);
     }
 
+    stk.data[3] = Poisoned_cell;
+    err |= StackVerificator(&stk);
+
     for (size_t i = 0; i < 5; ++i) {
         err |= StackPop(&stk);
         err |= StackVerificator(&stk);
