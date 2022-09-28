@@ -15,16 +15,20 @@ int main() {
         err |= StackVerificator(&stk);
     }
 
-    stk.data[3] = Poisoned_cell;
-    err |= StackVerificator(&stk);
+    /*stk.data[3] = Poisoned_cell;
+    err |= StackVerificator(&stk);*/
 
     for (size_t i = 0; i < 5; ++i) {
-        err |= StackPop(&stk);
+        int c = (int) StackPop(&stk, &err);
+        if (c != 9 - (int) i) {
+            printf("popped %d, expected %d\n", c, 10 - (int) i);
+            DumpLogs(&stk, err);
+        }
         err |= StackVerificator(&stk);
     }
 
-    stk.data[stk.size] = 14;
-    err |= StackVerificator(&stk);
+    /*stk.data[stk.size] = 14;
+    err |= StackVerificator(&stk);*/
 
     if (err == 0) {
         printf("There is no errors\n");
