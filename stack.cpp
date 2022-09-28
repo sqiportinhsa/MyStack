@@ -95,22 +95,21 @@ int StackPush(Stack *stk, Elem_t value) {
     return errors;
 }
 
-int StackPop(Stack *stk) {
+Elem_t StackPop(Stack *stk, int *err) {
     if (stk->size == 0) {
         return EMPTY_STACK;
     }
 
-    int err = NO_ERROR;
-
     --(stk->size);
 
-    
+    Elem_t popped_el = stk->data[stk->size];
+
     stk->hash = (stk->hash - (size_t) stk->data[stk->size]) / Hash_mult_const;
     
-    err |= PoisonCells(stk, 1);
-    err |= ResizeStack(stk, stk->capacity);
+    *err |= PoisonCells(stk, 1);
+    *err |= ResizeStack(stk, stk->capacity);
 
-    return err;
+    return popped_el;
 }
 
 Error ResizeStack(Stack *stk, size_t capacity) {
