@@ -32,7 +32,7 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
 
     Print(logs, "Logs called in %s at %s(%d):\n", func, file, line);
 
-    if (ErrorIsThere(errors, LOGS_PTR_CRASHED)) {
+    if (ErrorIsThere(errors, LOGS_PTR_CRASHED) || stk->logs == nullptr) {
         Print(logs, "LOGS_PTR_CRASHED: information about creation of stack was lost.\n");
 
     } else {
@@ -101,7 +101,7 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
         }
         #endif
 
-        for (size_t i = 0;         i < stk->size;     ++i) {
+        for (size_t i = 0; i < stk->size && i < stk->capacity; ++i) {
             Print(logs, "\t \t*[%zd] = %-10lf",   i, stk->data[i]);
             #ifdef DEEP_VERIFICATION
             if (IsPoisoned(stk->data[i])) {
