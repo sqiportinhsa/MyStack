@@ -53,7 +53,7 @@ typedef enum {
 } Error;
 
 #define StackCtr(stk, n_elem)                                                 \
-        StackCtrWithLogs(stk, n_elem, __LINE__, __PRETTY_FUNCTION__, __FILE__);
+        StackCtrWithLogs(stk, n_elem, __LINE__, __PRETTY_FUNCTION__, __FILE__)
 
 Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file);
 int StackDestr(Stack *stk);
