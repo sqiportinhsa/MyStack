@@ -1,5 +1,5 @@
-#include "verification.h"
 #include "stack_logs.h"
+#include "verification.h"
 
 int RealStackVerificator(Stack *stk, const char *file, const char *func, int line) {
     int errors = NO_ERROR;
@@ -41,7 +41,7 @@ int RealStackVerificator(Stack *stk, const char *file, const char *func, int lin
         }
 
         if (!ErrorIsThere(errors, UNEXPECTED_PSN)) {
-            for (size_t i = stk->size; i < stk->capacity; ++i) {
+            for (size_t i = stk->size + 1; i < stk->capacity; ++i) {
                 if (!IsPoisoned(stk->data[i])) {
                     errors |= UNEXPECTED_ELM;
                     break;

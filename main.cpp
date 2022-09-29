@@ -4,45 +4,6 @@
 #include "verification.h"
 
 int main() {
-    int err = 0;
-
-    Stack stk = {};
-
-    err |= StackCtr(&stk, 0);
-
-    DumpLogs(&stk);
-
-    for (size_t i = 0; i < 10; ++i) {
-        err |= StackPush(&stk, (double) i);
-        err |= SafeStackVerificator(&stk);
-    }
-
-    stk.data[3] = Poisoned_cell;
-    err |= SafeStackVerificator(&stk);
-
-    for (size_t i = 0; i < 5; ++i) {
-        int c = (int) StackPop(&stk, &err);
-        if (c != 9 - (int) i) {
-            printf("popped %d, expected %d\n", c, 10 - (int) i);
-            DumpLogs(&stk);
-        }
-        DumpLogs(&stk);
-        err |= SafeStackVerificator(&stk);
-    }
-
-    DumpLogs(nullptr);
-
-    stk.data[stk.size] = 14;
-    err |= SafeStackVerificator(&stk);
-
-    if (err == 0) {
-        printf("There is no errors\n");
-    } else {
-        printf("Test failed. Error code: %d. Check logs please.\n", err);
-    }
-
-    StackDestr(&stk);
-    DumpLogs(&stk);
-
+    printf("Hello world");
     return 0;
 }

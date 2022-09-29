@@ -1,8 +1,8 @@
 #include "stack.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 #include "verification.h"
 
 Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file) {

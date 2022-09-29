@@ -4,8 +4,8 @@
 #include "stack.h"
 
 #define DEEP_VERIFICATION
-#define CANARY_VERIFICATION
 #define HASH_VERIFICATION
+#define CANARY_VERIFICATION
 #define SAFEMODE
 
 #define StackVerificator(stk) \

@@ -2,7 +2,7 @@
 #define STACK_LOGS
 
 #define LOGS_TO_FILE
-//#define LOGS_TO_CONSOLE
+#define LOGS_TO_CONSOLE
 
 #include "stack.h"
 #include "verification.h"

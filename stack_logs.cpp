@@ -1,8 +1,8 @@
 #include "stack_logs.h"
 
 #include <stdio.h>
-#include <math.h>
 #include <stdarg.h>
+#include <math.h>
 
 #include "verification.h"
 
