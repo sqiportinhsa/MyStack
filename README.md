@@ -1,6 +1,8 @@
 # MyStack
 Realization of stack in C/C++ with some useful functions.
 
+This branch is for cross-checking of projects in my group in university. Code here is the same as original except the small error that my partner needs to find. You can do it if you want and than look at commits history to test yours ideas. Some files were changed by rearrangig of lines and don't contain any errors. It was needed to hide real changes.
+
 ## How to start using
 
 * Download files "stack.cpp" and "stack.h" and add them to your project folder. 
