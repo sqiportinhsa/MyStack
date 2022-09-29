@@ -10,36 +10,39 @@ int main() {
 
     err |= StackCtr(&stk, 0);
 
-    DumpLogs(&stk, StackVerificator(&stk));
+    DumpLogs(&stk);
 
     for (size_t i = 0; i < 10; ++i) {
         err |= StackPush(&stk, (double) i);
-        err |= StackVerificator(&stk);
+        err |= SafeStackVerificator(&stk);
     }
 
     stk.data[3] = Poisoned_cell;
-    err |= StackVerificator(&stk);
+    err |= SafeStackVerificator(&stk);
 
     for (size_t i = 0; i < 5; ++i) {
         int c = (int) StackPop(&stk, &err);
         if (c != 9 - (int) i) {
             printf("popped %d, expected %d\n", c, 10 - (int) i);
-            DumpLogs(&stk, err);
+            DumpLogs(&stk);
         }
-        DumpLogs(&stk, err);
-        err |= StackVerificator(&stk);
+        DumpLogs(&stk);
+        err |= SafeStackVerificator(&stk);
     }
 
-    DumpLogs(nullptr, 0);
+    DumpLogs(nullptr);
 
     stk.data[stk.size] = 14;
-    err |= StackVerificator(&stk);
+    err |= SafeStackVerificator(&stk);
 
     if (err == 0) {
         printf("There is no errors\n");
     } else {
         printf("Test failed. Error code: %d. Check logs please.\n", err);
     }
+
+    StackDestr(&stk);
+    DumpLogs(&stk);
 
     return 0;
 }
