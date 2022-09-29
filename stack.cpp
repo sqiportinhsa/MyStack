@@ -77,7 +77,7 @@ int StackPush(Stack *stk, Elem_t value) {
     #endif
 
     if (stk->size >= stk->capacity) {
-        errors |= ResizeStack(stk, stk->capacity * 2);
+        errors |= ResizeStack(stk, stk->capacity * 2 + 1);
     }
 
     if (IsPoisoned(stk->data[stk->size - 1]) || !IsPoisoned(stk->data[stk->size])) {
@@ -125,7 +125,7 @@ Error ResizeStack(Stack *stk, size_t capacity) {
         stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
         stk->capacity = capacity;
 
-        PoisonCells(stk, stk->capacity / 2);
+        PoisonCells(stk, stk->capacity / 2 + 1);
     }
 
     if (stk->size < capacity / 2) {
