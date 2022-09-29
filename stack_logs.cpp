@@ -73,8 +73,8 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
     Print(logs, "Stack info:\n");
 
     Print(logs, "{\n");
-    Print(logs, "\t capacity = %lld\n", stk->capacity);
-    Print(logs, "\t size     = %lld\n", stk->size);
+    Print(logs, "\t capacity = %zd\n", stk->capacity);
+    Print(logs, "\t size     = %zd\n", stk->size);
     Print(logs, "\t data [%p]\n",       stk->data);
 
     if (ErrorIsThere(errors, UNEXPECTED_PSN)) {
@@ -94,15 +94,15 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
         Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
 
         if (ErrorIsThere(errors, L_BORDER_CHANGED)) {
-            Print(logs, "\t \t Left  Border = %llu (expected %llu)\n", *l_border_ptr, Border);
+            Print(logs, "\t \t Left  Border = %zd (expected %zd)\n", *l_border_ptr, Border);
             Print(logs, "errors: %d\n", errors);
         } else {
-            Print(logs, "\t \t Left  Border = %llu (OK)\n", *l_border_ptr);
+            Print(logs, "\t \t Left  Border = %zd (OK)\n", *l_border_ptr);
         }
         #endif
 
         for (size_t i = 0;         i < stk->size;     ++i) {
-            Print(logs, "\t \t*[%lld] = %-10f",   i, stk->data[i]);
+            Print(logs, "\t \t*[%zd] = %-10lf",   i, stk->data[i]);
             #ifdef DEEP_VERIFICATION
             if (IsPoisoned(stk->data[i])) {
                 Print(logs, " (poisoned)");
@@ -115,7 +115,7 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
 
 
         for (size_t i = stk->size; i < stk->capacity; ++i) {
-            Print(logs, "\t \t [%lld] = %-10f", i, stk->data[i]);
+            Print(logs, "\t \t [%zd] = %-10lf", i, stk->data[i]);
             #ifdef DEEP_VERIFICATION
             if (IsPoisoned(stk->data[i])) {
                 Print(logs, " (poisoned)");
@@ -128,9 +128,9 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
 
         #ifdef CANARY_VERIFICATION
         if (ErrorIsThere(errors, R_BORDER_CHANGED)) {
-            Print(logs, "\t \t Right Border = %llu (expected %llu)\n", *r_border_ptr, Border);
+            Print(logs, "\t \t Right Border = %zd (expected %llu)\n", *r_border_ptr, Border);
         } else {
-            Print(logs, "\t \t Right Border = %llu (OK)\n", *r_border_ptr);
+            Print(logs, "\t \t Right Border = %zd (OK)\n", *r_border_ptr);
         }
         #endif
 
