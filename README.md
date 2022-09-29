@@ -56,6 +56,10 @@ This define turns on logs output to logfile everytime your verification returned
 ```
 
 ## Examples of using
-You can look at "main.cpp" as example of working with MyStack. It shows how to construct stack, push and pop elements and do verification. Run it to see how safemode verification catch editing stack info and dump logs. To compile download all files and use "make" command from your terminal. You store all files in one folder and have folders bin and build for object files and executable file in it.
+You can look at "main.cpp" as example of working with MyStack. It shows how to construct stack, push and pop elements and do verification. Run it to see how safemode verification catch editing stack info and dump logs. 
+
+Windows: To compile download all files and use "make" command from your terminal. You store all files in one folder and have folders bin and build for object files and executable file in it. 
+
+Linux: you need to create your own makefile because of difference in operation systems.
 
 [Useful link](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
