@@ -8,9 +8,13 @@
 #define HASH_VERIFICATION
 #define SAFEMODE
 
-#define StackVerificator(stk) SafeStackVerificator(stk, __FILE__, __PRETTY_FUNCTION__, __LINE__)
+#define StackVerificator(stk) \
+    RealStackVerificator(stk, __FILE__, __PRETTY_FUNCTION__, __LINE__)
+#define SafeStackVerificator(stk) \
+    RealSafeStackVerificator(stk, __FILE__, __PRETTY_FUNCTION__, __LINE__)
 
-int SafeStackVerificator(Stack *stk, const char *file, const char *func, int line);
+int RealStackVerificator(Stack *stk, const char *file, const char *func, int line);
+int RealSafeStackVerificator(Stack *stk, const char *file, const char *func, int line);
 int ErrorIsThere(int errors, Error error);
 size_t StackHash(Stack *stk);
 

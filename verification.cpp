@@ -1,7 +1,7 @@
 #include "verification.h"
 #include "stack_logs.h"
 
-int SafeStackVerificator(Stack *stk, const char *file, const char *func, int line) {
+int RealStackVerificator(Stack *stk, const char *file, const char *func, int line) {
     int errors = NO_ERROR;
 
     if (stk == nullptr) {
@@ -104,14 +104,14 @@ int SafeStackVerificator(Stack *stk, const char *file, const char *func, int lin
         }
     }
 
-    #ifdef SAFEMODE
+    return errors;
+}
 
+int RealSafeStackVerificator(Stack *stk, const char *file, const char *func, int line) {
+    int errors = RealStackVerificator(stk, file, func, line);
     if (errors != 0) {
         RealDumpLogs(stk,file, func, line, errors);
     }
-
-    #endif
-
     return errors;
 }
 
