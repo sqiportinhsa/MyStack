@@ -8,15 +8,17 @@ int main() {
 
     Stack stk = {};
 
-    err |= StackCtr(&stk, 3);
+    err |= StackCtr(&stk, 0);
+
+    DumpLogs(&stk, StackVerificator(&stk));
 
     for (size_t i = 0; i < 10; ++i) {
         err |= StackPush(&stk, (double) i);
         err |= StackVerificator(&stk);
     }
 
-    /*stk.data[3] = Poisoned_cell;
-    err |= StackVerificator(&stk);*/
+    stk.data[3] = Poisoned_cell;
+    err |= StackVerificator(&stk);
 
     for (size_t i = 0; i < 5; ++i) {
         int c = (int) StackPop(&stk, &err);
@@ -30,8 +32,8 @@ int main() {
 
     DumpLogs(nullptr, 0);
 
-    /*stk.data[stk.size] = 14;
-    err |= StackVerificator(&stk);*/
+    stk.data[stk.size] = 14;
+    err |= StackVerificator(&stk);
 
     if (err == 0) {
         printf("There is no errors\n");
