@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "verification.h"
+#include "stack_logs.h"
 
-Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file) {
+int StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file) {
     stk->logs = (Logs*) calloc(1, sizeof(Logs));
 
     if (stk->logs == nullptr) {
@@ -40,40 +41,46 @@ Error StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, co
     stk->left_border  = Border;
     stk->right_border = Border;
 
-    return PoisonCells(stk, n_elem);
+    PoisonCells(stk, n_elem);
+
+    return SafeStackVerificator(stk);
 }
 
 int StackDestr(Stack *stk) {
-    int errors = NO_ERROR;
+    int errors = StackVerificator(stk);
 
     #ifdef SAFEMODE
-    errors |= StackVerificator(stk);
+    errors |= SafeStackVerificator(stk);
     #endif
     
     stk->size = 0;
     errors |= PoisonCells(stk, stk->capacity);
     errors |= ResizeStack(stk, 0);
+
+    free((char*)stk->data - sizeof(Canary_t));
     stk->data = nullptr;
+
     return errors;
 }
 
 Error PoisonCells(Stack *stk, size_t n_cells) {
-    if (stk->size + n_cells > stk->capacity + 1) {
-        return SIZE_EXCEED_CAP;
+    Error err = NO_ERROR;
+    if (stk->size + n_cells > stk->capacity) {
+        err = SIZE_EXCEED_CAP;
     }
 
-    for (size_t i = 0; i < n_cells; ++i) {
+    for (size_t i = 0; i < n_cells && stk->size + i < stk->capacity; ++i) {
         (stk->data)[stk->size + i] = Poisoned_cell;
     }
 
-    return NO_ERROR;
+    return err;
 }
 
 int StackPush(Stack *stk, Elem_t value) {
     int errors = NO_ERROR;
 
     #ifdef SAFEMODE
-    errors |= StackVerificator(stk);
+    errors |= SafeStackVerificator(stk);
     #endif
 
     if (stk->size >= stk->capacity) {
@@ -89,15 +96,29 @@ int StackPush(Stack *stk, Elem_t value) {
     stk->hash = stk->hash*33 + (size_t) value;
 
     #ifdef SAFEMODE
-    StackVerificator(stk);
+    SafeStackVerificator(stk);
     #endif
     
     return errors;
 }
 
 Elem_t StackPop(Stack *stk, int *err) {
+    int errors = NO_ERROR;
+
+    #ifdef SAFEMODE
+    errors |= SafeStackVerificator(stk);
+    #else
+    errors |= StackVerificator(stk);
+    #endif
+
     if (stk->size == 0) {
-        return EMPTY_STACK;
+        errors |= EMPTY_STACK;
+
+        if (err != nullptr) {
+            *err = errors;
+        }
+
+        return Poisoned_cell;
     }
 
     --(stk->size);
@@ -106,8 +127,12 @@ Elem_t StackPop(Stack *stk, int *err) {
 
     stk->hash = (stk->hash - (size_t) stk->data[stk->size]) / Hash_mult_const;
     
-    *err |= PoisonCells(stk, 1);
-    *err |= ResizeStack(stk, stk->capacity);
+    errors |= PoisonCells(stk, 1);
+    errors |= ResizeStack(stk, stk->capacity);
+
+    if (err != nullptr) {
+        *err = errors;
+    }
 
     return popped_el;
 }
@@ -122,10 +147,12 @@ Error ResizeStack(Stack *stk, size_t capacity) {
             return MEMORY_EXCEED;
         }
 
+        size_t old_capacity = stk->capacity;
+
         stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
         stk->capacity = capacity;
 
-        PoisonCells(stk, stk->capacity / 2 + 1);
+        PoisonCells(stk, capacity - old_capacity);
     }
 
     if (stk->size < capacity / 2) {
@@ -145,7 +172,8 @@ Error ResizeStack(Stack *stk, size_t capacity) {
         if (stk->data == nullptr) {
             return MEMORY_EXCEED;
         }
-
+        
+        stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
         stk->capacity = 0;
     }
 
