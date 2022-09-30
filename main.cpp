@@ -26,6 +26,8 @@ int main() {
         DumpLogs(&stk);
     }
 
+    stk.data[5] = 14;
+
     err |= SafeStackVerificator(&stk);
 
     if (err == 0) {
