@@ -14,11 +14,8 @@ int main() {
 
     for (size_t i = 0; i < 10; ++i) {
         err |= StackPush(&stk, (double) i);
-        err |= SafeStackVerificator(&stk);
+        DumpLogs(&stk);
     }
-
-    stk.data[3] = Poisoned_cell;
-    err |= SafeStackVerificator(&stk);
 
     for (size_t i = 0; i < 5; ++i) {
         int c = (int) StackPop(&stk, &err);
@@ -27,12 +24,8 @@ int main() {
             DumpLogs(&stk);
         }
         DumpLogs(&stk);
-        err |= SafeStackVerificator(&stk);
     }
 
-    DumpLogs(nullptr);
-
-    stk.data[stk.size] = 14;
     err |= SafeStackVerificator(&stk);
 
     if (err == 0) {
@@ -40,6 +33,8 @@ int main() {
     } else {
         printf("Test failed. Error code: %d. Check logs please.\n", err);
     }
+
+    DumpLogs(nullptr);
 
     StackDestr(&stk);
     DumpLogs(&stk);
