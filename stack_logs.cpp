@@ -17,9 +17,7 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
         return;
     }
 
-    #endif
-
-    #ifndef LOGS_TO_FILE
+    #else
     #ifdef LOGS_TO_CONSOLE
     logs = stdout;
     #endif
@@ -163,8 +161,7 @@ void Print(FILE *output, const char *format, ...) {
 
     vfprintf(stdout, format, ptr);
 
-    #endif
-    #ifndef LOGS_TO_FILE
+    #else
 
     vfprintf(output, format, ptr);
 
