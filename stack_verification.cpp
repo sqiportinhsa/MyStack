@@ -6,14 +6,10 @@ int RealStackVerificator(Stack *stk, const char *file, const char *func, int lin
 
     if (stk == nullptr) {
         errors |= STCK_PTR_CRASHED;
-        
-        #ifdef SAFEMODE
 
         if (errors != 0) {
             RealDumpLogs(stk,file, func, line, errors);
         }
-
-        #endif
 
         return errors;
     }
