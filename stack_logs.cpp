@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdarg.h>
 
-#include "verification.h"
+#include "stack_verification.h"
 
 void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int errors) {
     FILE *logs = nullptr;
@@ -13,15 +13,15 @@ void RealDumpLogs(Stack *stk, const char *file, const char *func, int line, int 
 
     logs = fopen("logs.txt", "a");
 
-    if (logs == nullptr) {
-        return;
-    }
-
     #else
     #ifdef LOGS_TO_CONSOLE
     logs = stdout;
     #endif
     #endif
+
+    if (logs == nullptr) {
+        return;
+    }
 
     if (stk == nullptr) {
         Print(logs, "Can't print logs: pointer to stack is crushed");

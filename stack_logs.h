@@ -5,7 +5,7 @@
 //#define LOGS_TO_CONSOLE
 
 #include "stack.h"
-#include "verification.h"
+#include "stack_verification.h"
 
 #define DumpLogs(stk) RealDumpLogs(stk, __FILE__, __PRETTY_FUNCTION__, __LINE__, \
                                                           StackVerificator(stk))

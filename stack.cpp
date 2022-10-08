@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "verification.h"
+#include "stack_verification.h"
 #include "stack_logs.h"
 
 int StackCtrWithLogs(Stack *stk, size_t n_elem, int line, const char* func, const char* file) {
