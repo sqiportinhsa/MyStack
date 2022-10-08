@@ -61,6 +61,6 @@ int StackPush(Stack *stk, Elem_t value);
 Elem_t StackPop(Stack *stk, int *err = nullptr);
 Error ResizeStack(Stack *stk, size_t capacity);
 Error PoisonCells(Stack *stk, size_t n_cells);
-int IsPoisoned(double el1);
+int IsPoisoned(Elem_t el1);
 
 #endif
