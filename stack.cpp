@@ -1,8 +1,8 @@
-#include "stack.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "stack.h"
 #include "stack_verification.h"
 #include "stack_logs.h"
 
@@ -103,13 +103,13 @@ int StackPush(Stack *stk, Elem_t value) {
 }
 
 Elem_t StackPop(Stack *stk, int *err) {
+    if (stk == nullptr) {
+        return Poisoned_cell;
+    }
+
     int errors = NO_ERROR;
 
-    #ifdef SAFEMODE
     errors |= SafeStackVerificator(stk);
-    #else
-    errors |= StackVerificator(stk);
-    #endif
 
     if (stk->size == 0) {
         errors |= EMPTY_STACK;
@@ -138,6 +138,12 @@ Elem_t StackPop(Stack *stk, int *err) {
 }
 
 Error ResizeStack(Stack *stk, size_t capacity) {
+    if (stk == nullptr) {
+        return STCK_PTR_CRASHED;
+    }
+
+    SafeStackVerificator(stk);
+
     Canary_t *l_border_ptr = (Canary_t*) ((char*)stk->data - sizeof(Canary_t));
 
     if (stk->capacity < capacity) {
@@ -165,18 +171,7 @@ Error ResizeStack(Stack *stk, size_t capacity) {
         stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
         stk->capacity = capacity / 2;
     }
-
-    if (capacity == 0) {
-        stk->data = (Elem_t*) realloc(l_border_ptr, 2 * sizeof(Canary_t));
-
-        if (stk->data == nullptr) {
-            return MEMORY_EXCEED;
-        }
-        
-        stk->data = (Elem_t*) ((char*)stk->data + sizeof(Canary_t));
-        stk->capacity = 0;
-    }
-
+    
     Canary_t *r_border_ptr = (Canary_t*) ((char*)stk->data + sizeof(Elem_t) * stk->capacity);
     *r_border_ptr = Border;
 
