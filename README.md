@@ -11,9 +11,9 @@ Realization of stack in C/C++ with some useful functions.
 
 If you need some information about stack to debug your code, the "stack_logs" and "verification" are for you.
 
-* Download "stack_logs.cpp", "verification.cpp", "stack_logs.h" and "verification.h" and add them to your project folder.
-* Include "stack_logs.h" and "verification.h" everywhere you need.
-* Compile "stack_logs.cpp" and "verification.cpp" to the object file and add to all your object files at the moment of compilation.
+* Download "stack_logs.cpp", "stack_verification.cpp", "stack_logs.h" and "verification.h" and add them to your project folder.
+* Include "stack_logs.h" and "stack_verification.h" everywhere you need.
+* Compile "stack_logs.cpp" and "stack_verification.cpp" to the object file and add to all your object files at the moment of compilation.
 
 ### Verification modes
 There are some different ways to verificate your stack:
