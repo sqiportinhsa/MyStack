@@ -58,11 +58,11 @@ This define turns on logs output to logfile everytime your verification returned
 ## Functions using
 * Constructor
 ```c++
-StackCrtr(&stk);
+StackCtr(&stk);
 ```
 * Destructor
 ```c++
-StackDtrs(&stk);
+StackDestr(&stk);
 ```
 * Push
 ```c++
